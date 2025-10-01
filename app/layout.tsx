@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Personal AI Assistant",
-  description: "ChatGPT-like AI assistant built with Next.js",
+  title: "AI Assistant",
+  description: "AI assistant to help you with various tasks.",
 };
 
 export default function RootLayout({
