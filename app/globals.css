@@ -29,7 +29,7 @@
 }
 
 ::selection {
-    background: var(--color-ds-blue-700);
+    background: var(--color-ds-text-primary);
     color: var(--color-ds-background-primary);
 }
 
