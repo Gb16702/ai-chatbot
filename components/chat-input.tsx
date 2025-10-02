@@ -5,9 +5,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
 
-export function ChatInput({ onSubmit }: { onSubmit: (content: string) => void }) {
+export function ChatInput({
+  onSubmit,
+  isLoading = false,
+}: {
+  onSubmit: (content: string) => void;
+  isLoading?: boolean;
+}) {
   const [message, setMessage] = useState("");
-  const isDisabled = message.trim().length === 0;
+  const isDisabled = message.trim().length === 0 || isLoading;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
