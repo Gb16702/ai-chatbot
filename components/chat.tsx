@@ -36,6 +36,16 @@ export function Chat({
 
     setIsLoading(true);
 
+    const assistantMessageId = generateUUID();
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      createdAt: new Date(),
+    };
+
+    setMessages((prev) => [...prev, assistantMessage]);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -54,16 +64,48 @@ export function Chat({
         throw new Error("Failed to get response");
       }
 
-      const data = await response.json();
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
 
-      const assistantMessage: Message = {
-        id: generateUUID(),
-        role: "assistant",
-        content: data.message.content,
-        createdAt: new Date(),
-      };
+      if (!reader) {
+        throw new Error("No reader available");
+      }
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n").filter((line) => line.trim() !== "");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6);
+
+            if (data === "[DONE]") {
+              continue;
+            }
+
+            try {
+              const parsed = JSON.parse(data);
+              const content = parsed.content || "";
+
+              if (content) {
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === assistantMessageId
+                      ? { ...msg, content: msg.content + content }
+                      : msg
+                  )
+                );
+              }
+            } catch (error) {
+              console.error("Error parsing chunk:", error);
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error("Error calling API:", error);
     } finally {
