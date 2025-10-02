@@ -1,16 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
 
-export function ChatInput() {
+export function ChatInput({ onSubmit }: { onSubmit: (content: string) => void }) {
   const [message, setMessage] = useState("");
   const isDisabled = message.trim().length === 0;
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const trimmedMessage = message.trim();
+    if (trimmedMessage.length === 0) return;
+
+    onSubmit(trimmedMessage);
+    setMessage("");
+  };
+
   return (
-    <form className="w-full overflow-hidden rounded-xl border border-ds-border-default bg-ds-background-secondary p-3 shadow-xs transition-all duration-200 focus-within:border-ds-border-active hover:focus-within:border-ds-border-active hover:border-ds-border-hover">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full overflow-hidden rounded-xl border border-ds-border-default bg-ds-background-secondary p-3 shadow-xs transition-all duration-200 focus-within:border-ds-border-active hover:focus-within:border-ds-border-active hover:border-ds-border-hover"
+    >
       <div className="flex flex-row items-end gap-2">
         <Textarea
           value={message}
