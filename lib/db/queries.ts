@@ -5,15 +5,18 @@ import { chat, message } from "./schema";
 export async function saveChat({
   id,
   title,
+  visibility = "private",
 }: {
   id: string;
   title: string;
+  visibility?: "private" | "public";
 }) {
   try {
     return await db.insert(chat).values({
       id,
       createdAt: new Date(),
       title,
+      visibility,
     });
   } catch (error) {
     console.error("Failed to save chat in database");

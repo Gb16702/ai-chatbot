@@ -4,6 +4,7 @@ export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   createdAt: timestamp("createdAt").notNull(),
   title: text("title").notNull(),
+  visibility: text("visibility").notNull().default("private"),
 });
 
 export const message = pgTable("Message", {

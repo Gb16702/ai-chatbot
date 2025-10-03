@@ -21,8 +21,9 @@ export function Chat({
   const handleSubmit = async (content: string) => {
     const isFirstMessage = messages.length === 0;
 
+    const userMessageId = generateUUID();
     const userMessage: Message = {
-      id: generateUUID(),
+      id: userMessageId,
       role: "user",
       content,
       createdAt: new Date(),
@@ -53,6 +54,8 @@ export function Chat({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          chatId: id,
+          userMessageId: userMessageId,
           messages: [...messages, userMessage].map((msg) => ({
             role: msg.role,
             content: msg.content,
