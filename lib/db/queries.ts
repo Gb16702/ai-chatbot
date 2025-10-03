@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "./index";
 import { chat, message } from "./schema";
 
@@ -58,6 +58,28 @@ export async function getMessagesByChatId({ id }: { id: string }) {
       .orderBy(message.createdAt);
   } catch (error) {
     console.error("Failed to get messages by chat id from database");
+    throw error;
+  }
+}
+
+export async function getAllChats() {
+  try {
+    return await db
+      .select()
+      .from(chat)
+      .orderBy(desc(chat.createdAt));
+  } catch (error) {
+    console.error("Failed to get all chats from database");
+    throw error;
+  }
+}
+
+export async function deleteChatById({ id }: { id: string }) {
+  try {
+    await db.delete(message).where(eq(message.chatId, id));
+    await db.delete(chat).where(eq(chat.id, id));
+  } catch (error) {
+    console.error("Failed to delete chat from database");
     throw error;
   }
 }

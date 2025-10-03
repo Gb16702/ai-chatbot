@@ -118,7 +118,7 @@ export function Chat({
 
   if (messages.length === 0) {
     return (
-      <div className="bg-ds-background-primary flex min-h-screen items-center justify-center">
+      <div className="bg-ds-background-primary flex h-full items-center justify-center">
         <div className="mx-auto w-full max-w-4xl space-y-10 px-4">
           <div className="space-y-1 pb-2">
             <h1 className="text-2xl font-semibold">Hello there</h1>
@@ -133,8 +133,8 @@ export function Chat({
   }
 
   return (
-    <div className="bg-ds-background-primary flex min-h-screen flex-col">
-      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
+    <div className="bg-ds-background-primary flex h-full flex-col">
+      <div className="mx-auto w-full max-w-4xl flex-1 overflow-auto px-4 py-8">
         <Messages messages={messages} />
       </div>
       <div className="border-t border-ds-border-default bg-ds-background-primary">
